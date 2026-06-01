@@ -1,0 +1,1201 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تعلم التجويد - Tajweed Master</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a5f4a;
+            --primary-light: #2d8a6e;
+            --primary-dark: #0d3d2e;
+            --gold: #c9a84c;
+            --gold-light: #e8d5a3;
+            --bg: #f8f9fa;
+            --card: #ffffff;
+            --text: #2c3e50;
+            --text-light: #5a6c7d;
+            --border: #e0e6ed;
+            --success: #27ae60;
+            --error: #e74c3c;
+            --warning: #f39c12;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Cairo', sans-serif; background: var(--bg); color: var(--text); line-height: 1.8; }
+        .header { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; padding: 1rem 2rem; box-shadow: 0 4px 20px rgba(26, 95, 74, 0.3); position: sticky; top: 0; z-index: 1000; }
+        .header-content { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 1.5rem; font-weight: 800; }
+        .logo-icon { width: 45px; height: 45px; background: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; color: var(--primary-dark); }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { color: white; text-decoration: none; font-weight: 600; padding: 0.5rem 1rem; border-radius: 8px; transition: all 0.3s; }
+        .nav-links a:hover, .nav-links a.active { background: rgba(255,255,255,0.15); }
+        .hero { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 50%, var(--primary-dark) 100%); color: white; padding: 4rem 2rem; text-align: center; position: relative; overflow: hidden; }
+        .hero h1 { font-size: 3rem; font-weight: 800; margin-bottom: 1rem; }
+        .hero p { font-size: 1.2rem; opacity: 0.9; max-width: 600px; margin: 0 auto 2rem; }
+        .hero-stats { display: flex; justify-content: center; gap: 3rem; margin-top: 2rem; }
+        .stat { text-align: center; }
+        .stat-number { font-size: 2.5rem; font-weight: 800; color: var(--gold); }
+        .stat-label { font-size: 0.9rem; opacity: 0.8; }
+        .progress-section { background: var(--card); padding: 1.5rem 2rem; border-bottom: 1px solid var(--border); }
+        .progress-container { max-width: 1200px; margin: 0 auto; }
+        .progress-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-weight: 600; }
+        .progress-bar { height: 12px; background: var(--border); border-radius: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--primary-light)); border-radius: 10px; transition: width 0.5s ease; width: 0%; }
+        .main-container { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+        .section-title { font-size: 1.8rem; font-weight: 700; color: var(--primary); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; }
+        .section-title::after { content: ''; flex: 1; height: 2px; background: linear-gradient(90deg, var(--gold), transparent); margin-right: 10px; }
+        .lessons-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 3rem; }
+        .lesson-card { background: var(--card); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.08); transition: all 0.3s; cursor: pointer; border: 2px solid transparent; }
+        .lesson-card:hover { transform: translateY(-5px); box-shadow: 0 8px 30px rgba(0,0,0,0.12); border-color: var(--gold); }
+        .lesson-card.completed { border-color: var(--success); }
+        .lesson-card.active { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(26, 95, 74, 0.1); }
+        .lesson-card.locked { opacity: 0.7; cursor: not-allowed; }
+        .lesson-header { padding: 1.5rem; background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: white; position: relative; }
+        .lesson-number { position: absolute; top: -15px; left: 20px; width: 40px; height: 40px; background: var(--gold); color: var(--primary-dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
+        .lesson-title { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.3rem; }
+        .lesson-subtitle { font-size: 0.85rem; opacity: 0.9; }
+        .lesson-body { padding: 1.5rem; }
+        .lesson-description { color: var(--text-light); font-size: 0.95rem; margin-bottom: 1rem; }
+        .lesson-meta { display: flex; justify-content: space-between; align-items: center; font-size: 0.85rem; color: var(--text-light); }
+        .lesson-status { display: flex; align-items: center; gap: 5px; padding: 0.3rem 0.8rem; border-radius: 20px; font-weight: 600; font-size: 0.8rem; }
+        .status-locked { background: #f0f0f0; color: #999; }
+        .status-available { background: #e8f5e9; color: var(--success); }
+        .status-completed { background: #e3f2fd; color: #1976d2; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 2000; backdrop-filter: blur(5px); }
+        .modal-overlay.active { display: flex; align-items: center; justify-content: center; padding: 2rem; }
+        .modal-content { background: var(--card); border-radius: 20px; max-width: 900px; width: 100%; max-height: 90vh; overflow-y: auto; position: relative; animation: modalSlide 0.3s ease; }
+        @keyframes modalSlide { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-header { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%); color: white; padding: 2rem; border-radius: 20px 20px 0 0; position: sticky; top: 0; z-index: 10; }
+        .modal-close { position: absolute; top: 1.5rem; left: 1.5rem; background: rgba(255,255,255,0.2); border: none; color: white; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+        .modal-close:hover { background: rgba(255,255,255,0.3); transform: rotate(90deg); }
+        .modal-body { padding: 2rem; }
+        .content-section { margin-bottom: 2rem; }
+        .content-section h3 { color: var(--primary); font-size: 1.3rem; margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--gold-light); }
+        .arabic-text { font-family: 'Amiri', serif; font-size: 1.5rem; line-height: 2.2; text-align: center; background: #f8f9fa; padding: 1.5rem; border-radius: 12px; margin: 1rem 0; border-right: 4px solid var(--primary); }
+        .example-box { background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%); border: 2px solid var(--gold); border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+        .example-box .label { color: var(--gold); font-weight: 700; margin-bottom: 0.5rem; }
+        .rule-box { background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%); border: 2px solid var(--success); border-radius: 12px; padding: 1.5rem; margin: 1rem 0; }
+        .rule-box .label { color: var(--success); font-weight: 700; margin-bottom: 0.5rem; }
+        .exercise-container { background: var(--bg); border-radius: 16px; padding: 2rem; margin: 2rem 0; }
+        .question-text { font-size: 1.2rem; font-weight: 600; margin-bottom: 1.5rem; color: var(--primary-dark); }
+        .options-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+        .option-btn { padding: 1rem 1.5rem; border: 2px solid var(--border); border-radius: 12px; background: white; cursor: pointer; font-family: 'Cairo', sans-serif; font-size: 1rem; transition: all 0.3s; text-align: center; }
+        .option-btn:hover { border-color: var(--primary); background: #f0f7f4; }
+        .option-btn.correct { border-color: var(--success); background: #e8f5e9; color: var(--success); }
+        .option-btn.wrong { border-color: var(--error); background: #ffebee; color: var(--error); }
+        .option-btn:disabled { cursor: not-allowed; }
+        .feedback { margin-top: 1rem; padding: 1rem; border-radius: 10px; font-weight: 600; display: none; }
+        .feedback.show { display: block; }
+        .feedback.correct { background: #e8f5e9; color: var(--success); }
+        .feedback.wrong { background: #ffebee; color: var(--error); }
+        .letters-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+        .letter-card { background: white; border: 2px solid var(--border); border-radius: 12px; padding: 1rem; text-align: center; cursor: pointer; transition: all 0.3s; }
+        .letter-card:hover { border-color: var(--primary); transform: scale(1.05); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .letter-char { font-family: 'Amiri', serif; font-size: 2rem; color: var(--primary); margin-bottom: 0.3rem; }
+        .letter-name { font-size: 0.8rem; color: var(--text-light); }
+        .quiz-container { background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%); color: white; border-radius: 20px; padding: 2rem; margin: 2rem 0; text-align: center; }
+        .quiz-container h3 { color: var(--gold); font-size: 1.5rem; margin-bottom: 1rem; }
+        .quiz-btn { background: var(--gold); color: var(--primary-dark); border: none; padding: 1rem 3rem; border-radius: 50px; font-family: 'Cairo', sans-serif; font-size: 1.1rem; font-weight: 700; cursor: pointer; transition: all 0.3s; margin-top: 1rem; }
+        .quiz-btn:hover { transform: scale(1.05); box-shadow: 0 8px 25px rgba(201, 168, 76, 0.4); }
+        .footer { background: var(--primary-dark); color: white; padding: 2rem; text-align: center; margin-top: 3rem; }
+        .footer p { opacity: 0.8; }
+        @media (max-width: 768px) { .hero h1 { font-size: 2rem; } .hero-stats { flex-direction: column; gap: 1rem; } .lessons-grid { grid-template-columns: 1fr; } .options-grid { grid-template-columns: 1fr; } .nav-links { display: none; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-in { animation: fadeIn 0.5s ease forwards; }
+        .audio-player { background: white; border-radius: 12px; padding: 1rem; display: flex; align-items: center; gap: 1rem; margin: 1rem 0; border: 2px solid var(--border); }
+        .play-btn { width: 50px; height: 50px; background: var(--primary); color: white; border: none; border-radius: 50%; cursor: pointer; font-size: 1.2rem; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+        .play-btn:hover { background: var(--primary-light); transform: scale(1.1); }
+        .audio-wave { flex: 1; height: 40px; background: linear-gradient(90deg, var(--primary-light) 0%, var(--primary) 50%, var(--primary-light) 100%); border-radius: 20px; opacity: 0.3; position: relative; overflow: hidden; }
+        .audio-wave::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent); animation: wave 2s infinite; }
+        @keyframes wave { from { left: -100%; } to { left: 100%; } }
+        .nav-buttons { display: flex; justify-content: space-between; margin-top: 2rem; padding-top: 2rem; border-top: 2px solid var(--border); }
+        .nav-btn { padding: 0.8rem 2rem; border: 2px solid var(--primary); background: white; color: var(--primary); border-radius: 10px; font-family: 'Cairo', sans-serif; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; }
+        .nav-btn:hover { background: var(--primary); color: white; }
+        .nav-btn.primary { background: var(--primary); color: white; }
+        .nav-btn.primary:hover { background: var(--primary-dark); }
+        .nav-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .completion-badge { display: none; background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%); color: var(--primary-dark); padding: 1.5rem; border-radius: 16px; text-align: center; margin: 2rem 0; animation: fadeIn 0.5s ease; }
+        .completion-badge.show { display: block; }
+        .completion-badge h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .tajweed-ikhfa { color: #e74c3c; font-weight: bold; }
+        .tajweed-idgham { color: #27ae60; font-weight: bold; }
+        .tajweed-qlqala { color: #f39c12; font-weight: bold; }
+        .tajweed-madd { color: #9b59b6; font-weight: bold; }
+        .tajweed-ghunna { color: #3498db; font-weight: bold; }
+        .tabs-container { margin: 1.5rem 0; }
+        .tabs-header { display: flex; gap: 0.5rem; border-bottom: 2px solid var(--border); margin-bottom: 1.5rem; }
+        .tab-btn { padding: 0.8rem 1.5rem; border: none; background: none; font-family: 'Cairo', sans-serif; font-size: 1rem; font-weight: 600; color: var(--text-light); cursor: pointer; border-bottom: 3px solid transparent; transition: all 0.3s; }
+        .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); }
+        .tab-btn:hover { color: var(--primary); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">📖</div>
+                <span>تعلم التجويد</span>
+            </div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#lessons" class="active">الدروس</a></li>
+                    <li><a href="#practice">التمرين</a></li>
+                    <li><a href="#progress">التقدم</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>تعلم التجويد بأسلوب تفاعلي</h1>
+        <p>رحلة شاملة لتعلم أحكام التجويد من الصفر حتى الإتقان مع تمارين تفاعلية واختبارات</p>
+        <div class="hero-stats">
+            <div class="stat">
+                <div class="stat-number">12</div>
+                <div class="stat-label">درساً تفاعلياً</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">تمريناً</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">مجاني</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="progress-section">
+        <div class="progress-container">
+            <div class="progress-header">
+                <span>تقدمك في التعلم</span>
+                <span id="progress-text">0%</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-bar"></div>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-container">
+        <h2 class="section-title" id="lessons">📚 الدروس</h2>
+        <div class="lessons-grid" id="lessons-container"></div>
+
+        <div class="quiz-container" id="practice">
+            <h3>🎯 اختبر معلوماتك</h3>
+            <p>اختبر فهمك لأحكام التجويد من خلال اختبار شامل</p>
+            <button class="quiz-btn" onclick="startQuiz()">ابدأ الاختبار</button>
+        </div>
+    </main>
+
+    <div class="modal-overlay" id="lesson-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="modal-close" onclick="closeModal()">✕</button>
+                <h2 id="modal-title">عنوان الدرس</h2>
+                <p id="modal-subtitle">وصف الدرس</p>
+            </div>
+            <div class="modal-body" id="modal-body"></div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>تعلم التجويد - تطبيق تفاعلي لتعليم أحكام التلاوة الصحيحة</p>
+        <p style="margin-top: 0.5rem; font-size: 0.9rem;">2026 - جميع الحقوق محفوظة</p>
+    </footer>
+
+    <script>
+        // Lessons Data
+        const lessons = [
+            {
+                id: 1,
+                title: "مقدمة في التجويد",
+                subtitle: "ما هو التجويد وأهميته",
+                description: "تعرف على تعريف التجويد وفوائده وحكمه الشرعي",
+                duration: "15 دقيقة",
+                completed: false,
+                locked: false,
+                content: `
+                    <div class="content-section">
+                        <h3>📖 تعريف التجويد</h3>
+                        <p>التجويد لغة: التحسين والإتقان</p>
+                        <p>التجويد اصطلاحاً: إخراج كل حرف من مخرجه وإعطاؤه حقه ومستحقه من الصفات</p>
+                        <div class="rule-box">
+                            <div class="label">🎯 الفائدة الأساسية</div>
+                            <p>قراءة القرآن الكريم بالطريقة الصحيحة التي تلقاها الرسول ﷺ</p>
+                        </div>
+                    </div>
+                    <div class="content-section">
+                        <h3>⚖️ حكم تعلم التجويد</h3>
+                        <div class="rule-box">
+                            <div class="label">الحكم الشرعي</div>
+                            <p><strong>فرض كفاية:</strong> يجب أن يكون في الأمة الإسلامية من يتقن التجويد</p>
+                            <p style="margin-top: 1rem;"><strong>حكم التطبيق:</strong> من الأفضل لكل مسلم أن يتعلم أحكام التجويد ويطبقها عند قراءة القرآن</p>
+                        </div>
+                    </div>
+                    <div class="exercise-container">
+                        <div class="question-text">❓ ما هو التجويد اصطلاحاً؟</div>
+                        <div class="options-grid">
+                            <button class="option-btn" onclick="checkAnswer(this, false, 1)">الحفظ</button>
+                            <button class="option-btn" onclick="checkAnswer(this, true, 1)">إخراج الحرف من مخرجه</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 1)">الترجمة</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 1)">التفسير</button>
+                        </div>
+                        <div class="feedback" id="feedback-1"></div>
+                    </div>
+                    <div class="completion-badge" id="completion-1">
+                        <h3>🎉 ممتاز! أكملت الدرس الأول</h3>
+                        <p>يمكنك الآن الانتقال إلى الدرس التالي</p>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn" disabled>← الدرس السابق</button>
+                        <button class="nav-btn primary" onclick="completeLesson(1)">أكمل الدرس ✓</button>
+                        <button class="nav-btn" onclick="openLesson(2)">الدرس التالي →</button>
+                    </div>
+                `
+            },
+            {
+                id: 2,
+                title: "مخارج الحروف",
+                subtitle: "أماكن نطق الحروف الصحيحة",
+                description: "تعلم من أين ننطق كل حرف من حروف اللغة العربية",
+                duration: "20 دقيقة",
+                completed: false,
+                locked: true,
+                content: `
+                    <div class="content-section">
+                        <h3>🗣️ مخارج الحروف</h3>
+                        <p>عدد مخارج الحروف: <strong>17 مخرجاً</strong></p>
+                        <div class="rule-box">
+                            <div class="label">1️⃣ الحلق</div>
+                            <p>الحروف: ء، ه، ع، ح، غ، خ</p>
+                            <div class="arabic-text">أهل - عام - غرب - خير</div>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">2️⃣ اللسان</div>
+                            <p>الحروف: ي، ش، ي، ض، ل، ن، ر، ط، د، ت</p>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">3️⃣ الشفتان</div>
+                            <p>الحروف: ب، م، ف</p>
+                            <div class="arabic-text">بيت - مال - فم</div>
+                        </div>
+                    </div>
+                    <div class="exercise-container">
+                        <div class="question-text">❓ كم عدد مخارج الحروف؟</div>
+                        <div class="options-grid">
+                            <button class="option-btn" onclick="checkAnswer(this, false, 2)">10</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 2)">15</button>
+                            <button class="option-btn" onclick="checkAnswer(this, true, 2)">17</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 2)">20</button>
+                        </div>
+                        <div class="feedback" id="feedback-2"></div>
+                    </div>
+                    <div class="completion-badge" id="completion-2">
+                        <h3>🎉 ممتاز! أكملت الدرس الثاني</h3>
+                        <p>يمكنك الآن الانتقال إلى الدرس التالي</p>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn" onclick="openLesson(1)">← الدرس السابق</button>
+                        <button class="nav-btn primary" onclick="completeLesson(2)">أكمل الدرس ✓</button>
+                        <button class="nav-btn" onclick="openLesson(3)">الدرس التالي →</button>
+                    </div>
+                `
+            },
+            {
+                id: 3,
+                title: "صفات الحروف",
+                subtitle: "الخصائص والصفات المميزة للحروف",
+                description: "تعلم الصفات التي تتمتع بها حروف العربية",
+                duration: "25 دقيقة",
+                completed: false,
+                locked: true,
+                content: `
+                    <div class="content-section">
+                        <h3>🎭 صفات الحروف</h3>
+                        <p>الصفات هي الخصائص الصوتية للحروف</p>
+                        <div class="rule-box">
+                            <div class="label">1️⃣ الجهر والهمس</div>
+                            <p><strong>الجهر:</strong> خروج الصوت عند النطق (ب، د، ج، ز)</p>
+                            <p style="margin-top: 0.5rem;"><strong>الهمس:</strong> عدم سماع صوت واضح (ف، ث، س، ش)</p>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">2️⃣ الشدة واللين</div>
+                            <p><strong>الشدة:</strong> حروف تمنع الصوت (ب، ت، ط، د، ك، ج، ق)</p>
+                            <p style="margin-top: 0.5rem;"><strong>اللين:</strong> حروف الألف والواو والياء الساكنة المسبوقة بمفتوح</p>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">3️⃣ الاستعلاء والاستفال</div>
+                            <p><strong>الاستعلاء:</strong> ارتفاع اللسان (خ، ص، ض، غ، ط، ق)</p>
+                            <p style="margin-top: 0.5rem;"><strong>الاستفال:</strong> انخفاض اللسان (بقية الحروف)</p>
+                        </div>
+                    </div>
+                    <div class="exercise-container">
+                        <div class="question-text">❓ ما هي صفة حرف الباء؟</div>
+                        <div class="options-grid">
+                            <button class="option-btn" onclick="checkAnswer(this, true, 3)">جهر وشدة</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 3)">همس وشدة</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 3)">جهر وليّن</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 3)">همس وليّن</button>
+                        </div>
+                        <div class="feedback" id="feedback-3"></div>
+                    </div>
+                    <div class="completion-badge" id="completion-3">
+                        <h3>🎉 ممتاز! أكملت الدرس الثالث</h3>
+                        <p>يمكنك الآن الانتقال إلى الدرس التالي</p>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn" onclick="openLesson(2)">← الدرس السابق</button>
+                        <button class="nav-btn primary" onclick="completeLesson(3)">أكمل الدرس ✓</button>
+                        <button class="nav-btn" onclick="openLesson(4)">الدرس التالي →</button>
+                    </div>
+                `
+            },
+            {
+                id: 4,
+                title: "النون الساكنة والتنوين",
+                subtitle: "أحكام النون الساكنة والتنوين",
+                description: "تعلم الأحكام الأربعة للنون الساكنة والتنوين",
+                duration: "25 دقيقة",
+                completed: false,
+                locked: true,
+                content: `
+                    <div class="content-section">
+                        <h3>📝 أحكام النون الساكنة والتنوين</h3>
+                        <p>للنون الساكنة والتنوين أربعة أحكام:</p>
+                        <div class="rule-box">
+                            <div class="label">1️⃣ الإظهار</div>
+                            <p>إظهار النون أو التنوين دون غنة</p>
+                            <p style="margin-top: 0.5rem;"><strong>الحروف:</strong> ء، ه، ع، ح، غ، خ</p>
+                            <div class="arabic-text" style="font-size: 1.2rem;">
+                                <span class="tajweed-ikhfa">ن</span>مَا - <span class="tajweed-ikhfa">تَنْ</span>هَاهُمْ
+                            </div>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">2️⃣ الإدغام</div>
+                            <p>إدخال النون في الحرف التالي مع الغنة</p>
+                            <p style="margin-top: 0.5rem;"><strong>الحروف:</strong> ي، ر، م، ل، و، ن</p>
+                            <div class="arabic-text" style="font-size: 1.2rem;">
+                                <span class="tajweed-idgham">نْ</span>يَار - <span class="tajweed-idgham">نْ</span>رَاهُ
+                            </div>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">3️⃣ الإقلاب</div>
+                            <p>تحويل النون إلى ميم قبل الباء</p>
+                            <div class="arabic-text" style="font-size: 1.2rem;">
+                                <span class="tajweed-qlqala">نْ</span>بَا
+                            </div>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">4️⃣ الإخفاء</div>
+                            <p>إخفاء النون بدون إظهار ولا إدغام</p>
+                            <p style="margin-top: 0.5rem;"><strong>الحروف:</strong> ث، ج، د، ذ، ز، س، ش، ص، ض، ط، ع، غ، ف، ق، ك</p>
+                        </div>
+                    </div>
+                    <div class="exercise-container">
+                        <div class="question-text">❓ ما حكم النون الساكنة قبل الباء؟</div>
+                        <div class="options-grid">
+                            <button class="option-btn" onclick="checkAnswer(this, false, 4)">الإظهار</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 4)">الإدغام</button>
+                            <button class="option-btn" onclick="checkAnswer(this, true, 4)">الإقلاب</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 4)">الإخفاء</button>
+                        </div>
+                        <div class="feedback" id="feedback-4"></div>
+                    </div>
+                    <div class="completion-badge" id="completion-4">
+                        <h3>🎉 ممتاز! أكملت الدرس الرابع</h3>
+                        <p>يمكنك الآن الانتقال إلى الدرس التالي</p>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn" onclick="openLesson(3)">← الدرس السابق</button>
+                        <button class="nav-btn primary" onclick="completeLesson(4)">أكمل الدرس ✓</button>
+                        <button class="nav-btn" onclick="openLesson(5)">الدرس التالي →</button>
+                    </div>
+                `
+            },
+            {
+                id: 5,
+                title: "الميم الساكنة",
+                subtitle: "أحكام الميم الساكنة",
+                description: "تعلم أحكام الميم الساكنة الثلاثة",
+                duration: "20 دقيقة",
+                completed: false,
+                locked: true,
+                content: `
+                    <div class="content-section">
+                        <h3>📝 أحكام الميم الساكنة</h3>
+                        <p>للميم الساكنة ثلاثة أحكام:</p>
+                        <div class="rule-box">
+                            <div class="label">1️⃣ الإظهار الشفوي</div>
+                            <p>إظهار الميم قبل الحروف ما عدا الباء والميم</p>
+                            <div class="arabic-text">
+                                <span class="tajweed-ikhfa">مْ</span>كَنَ - <span class="tajweed-ikhfa">مْ</span>دِينَة
+                            </div>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">2️⃣ الإدغام الشفوي</div>
+                            <p>إدغام الميم في الميم</p>
+                            <div class="arabic-text">
+                                <span class="tajweed-idgham">مْ</span>مَا
+                            </div>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">3️⃣ الإخفاء الشفوي</div>
+                            <p>إخفاء الميم قبل الباء</p>
+                            <div class="arabic-text">
+                                <span class="tajweed-qlqala">مْ</span>بَا
+                            </div>
+                        </div>
+                    </div>
+                    <div class="exercise-container">
+                        <div class="question-text">❓ كم حكماً للميم الساكنة؟</div>
+                        <div class="options-grid">
+                            <button class="option-btn" onclick="checkAnswer(this, false, 5)">2</button>
+                            <button class="option-btn" onclick="checkAnswer(this, true, 5)">3</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 5)">4</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 5)">5</button>
+                        </div>
+                        <div class="feedback" id="feedback-5"></div>
+                    </div>
+                    <div class="completion-badge" id="completion-5">
+                        <h3>🎉 ممتاز! أكملت الدرس الخامس</h3>
+                        <p>يمكنك الآن الانتقال إلى الدرس التالي</p>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn" onclick="openLesson(4)">← الدرس السابق</button>
+                        <button class="nav-btn primary" onclick="completeLesson(5)">أكمل الدرس ✓</button>
+                        <button class="nav-btn" onclick="openLesson(6)">الدرس التالي →</button>
+                    </div>
+                `
+            },
+            {
+                id: 6,
+                title: "التفخيم والترقيق",
+                subtitle: "تفخيم وترقيق الحروف",
+                description: "تعلم متى تفخم الحروف ومتى ترقق",
+                duration: "20 دقيقة",
+                completed: false,
+                locked: true,
+                content: `
+                    <div class="content-section">
+                        <h3>🔊 التفخيم والترقيق</h3>
+                        <div class="rule-box">
+                            <div class="label">1️⃣ حروف التفخيم</div>
+                            <p>الحروف المستعلية: خ، ص، ض، غ، ط، ق</p>
+                            <p style="margin-top: 0.5rem;"><strong>إضافة:</strong> الراء والألف واللام</p>
+                            <div class="arabic-text">
+                                <span class="tajweed-madd">قَالَ</span> - <span class="tajweed-madd">ضَرَبَ</span>
+                            </div>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">2️⃣ الراء المفخمة والمرققة</div>
+                            <p><strong>تفخم:</strong> إذا كانت مضمومة أو مفتوحة أو مسبوقة بساكن مستعل</p>
+                            <p style="margin-top: 0.5rem;"><strong>ترقق:</strong> إذا كانت مكسورة</p>
+                            <div class="arabic-text">
+                                رَحْمَة (مفخمة) - رِحْمَة (مرققة)
+                            </div>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">3️⃣ اللام المفخمة والمرققة</div>
+                            <p><strong>تفخم:</strong> لام التعريف قبل الحروف المستعلية</p>
+                            <p style="margin-top: 0.5rem;"><strong>ترقق:</strong> في غير ذلك</p>
+                        </div>
+                    </div>
+                    <div class="exercise-container">
+                        <div class="question-text">❓ متى تفخم الراء؟</div>
+                        <div class="options-grid">
+                            <button class="option-btn" onclick="checkAnswer(this, true, 6)">إذا كانت مضمومة أو مفتوحة</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 6)">إذا كانت مكسورة</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 6)">دائماً</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 6)">لا تفخم أبداً</button>
+                        </div>
+                        <div class="feedback" id="feedback-6"></div>
+                    </div>
+                    <div class="completion-badge" id="completion-6">
+                        <h3>🎉 ممتاز! أكملت الدرس السادس</h3>
+                        <p>يمكنك الآن الانتقال إلى الدرس التالي</p>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn" onclick="openLesson(5)">← الدرس السابق</button>
+                        <button class="nav-btn primary" onclick="completeLesson(6)">أكمل الدرس ✓</button>
+                        <button class="nav-btn" onclick="openLesson(7)">الدرس التالي →</button>
+                    </div>
+                `
+            },
+            {
+                id: 7,
+                title: "قلقلة الحروف",
+                subtitle: "حروف القلقلة وأحكامها",
+                description: "تعلم حروف القلقلة ومتى تقلقل",
+                duration: "15 دقيقة",
+                completed: false,
+                locked: true,
+                content: `
+                    <div class="content-section">
+                        <h3>📢 قلقلة الحروف</h3>
+                        <p>القلقلة: اضطراب في نطق الحرف الساكن</p>
+                        <div class="rule-box">
+                            <div class="label">حروف القلقلة</div>
+                            <p><strong>5 حروف:</strong> ق، ط، ب، ج، د</p>
+                            <p style="margin-top: 0.5rem;">يمكن تذكرها بـ: <strong>"قطب جد"</strong></p>
+                            <div class="letters-grid">
+                                <div class="letter-card">
+                                    <div class="letter-char">ق</div>
+                                    <div class="letter-name">قاف</div>
+                                </div>
+                                <div class="letter-card">
+                                    <div class="letter-char">ط</div>
+                                    <div class="letter-name">طاء</div>
+                                </div>
+                                <div class="letter-card">
+                                    <div class="letter-char">ب</div>
+                                    <div class="letter-name">باء</div>
+                                </div>
+                                <div class="letter-card">
+                                    <div class="letter-char">ج</div>
+                                    <div class="letter-name">جيم</div>
+                                </div>
+                                <div class="letter-card">
+                                    <div class="letter-char">د</div>
+                                    <div class="letter-name">دال</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">🎯 متى تقلقل؟</div>
+                            <p><strong>عند السكون:</strong> عندما تكون ساكنة</p>
+                            <p style="margin-top: 0.5rem;"><strong>عند الوقف خاصة:</strong> تكون أوضح عند الوقف على الحرف</p>
+                            <div class="arabic-text">
+                                <span class="tajweed-qlqala">أَحَدٌ</span> - <span class="tajweed-qlqala">يَقِفُ</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="exercise-container">
+                        <div class="question-text">❓ أي الحروف التالية من حروف القلقلة؟</div>
+                        <div class="options-grid">
+                            <button class="option-btn" onclick="checkAnswer(this, true, 7)">ق، ط، ب، ج، د</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 7)">س، ش، ص، ض، ظ</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 7)">ف، ح، ث، خ، هـ</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 7)">ل، ر، م، ن، و</button>
+                        </div>
+                        <div class="feedback" id="feedback-7"></div>
+                    </div>
+                    <div class="completion-badge" id="completion-7">
+                        <h3>🎉 ممتاز! أكملت الدرس السابع</h3>
+                        <p>يمكنك الآن الانتقال إلى الدرس التالي</p>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn" onclick="openLesson(6)">← الدرس السابق</button>
+                        <button class="nav-btn primary" onclick="completeLesson(7)">أكمل الدرس ✓</button>
+                        <button class="nav-btn" onclick="openLesson(8)">الدرس التالي →</button>
+                    </div>
+                `
+            },
+            {
+                id: 8,
+                title: "اللام الشمسية والقمرية",
+                subtitle: "التفريق بين اللام الشمسية والقمرية",
+                description: "تعلم الفرق بين اللام الشمسية والقمرية وأحكام كل منها",
+                duration: "18 دقيقة",
+                completed: false,
+                locked: true,
+                content: `
+                    <div class="content-section">
+                        <h3>☀️🌙 اللام الشمسية والقمرية</h3>
+                        <div class="rule-box">
+                            <div class="label">1️⃣ اللام الشمسية</div>
+                            <p><strong>التعريف:</strong> لام تدغم في حرف بعدها</p>
+                            <p style="margin-top: 0.5rem;"><strong>الحروف:</strong> ت، ث، د، ذ، ر، ز، س، ش، ص، ض، ط، ظ، ل، ن (14 حرفاً)</p>
+                            <div class="arabic-text">
+                                الشَّمْس - الدِّين - الرَّحْمَن
+                            </div>
+                            <p style="margin-top: 1rem;">⚠️ عند الكتابة: تُكتب لاماً، وعند القراءة: تُدغم</p>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">2️⃣ اللام القمرية</div>
+                            <p><strong>التعريف:</strong> لام تظهر قبل الحرف</p>
+                            <p style="margin-top: 0.5rem;"><strong>الحروف:</strong> ء، ب، ج، ح، خ، ع، غ، ف، ق، ك، م، و، ي، ة (14 حرفاً)</p>
+                            <div class="arabic-text">
+                                الأَسَد - الْبَيْت - الْقَمَر
+                            </div>
+                            <p style="margin-top: 1rem;">✅ عند القراءة: تظهر بوضوح</p>
+                        </div>
+                    </div>
+                    <div class="exercise-container">
+                        <div class="question-text">❓ حرّف اللام في "الشمس" هي:</div>
+                        <div class="options-grid">
+                            <button class="option-btn" onclick="checkAnswer(this, true, 8)">شمسية</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 8)">قمرية</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 8)">ساكنة</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 8)">مشددة</button>
+                        </div>
+                        <div class="feedback" id="feedback-8"></div>
+                    </div>
+                    <div class="completion-badge" id="completion-8">
+                        <h3>🎉 ممتاز! أكملت الدرس الثامن</h3>
+                        <p>يمكنك الآن الانتقال إلى الدرس التالي</p>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn" onclick="openLesson(7)">← الدرس السابق</button>
+                        <button class="nav-btn primary" onclick="completeLesson(8)">أكمل الدرس ✓</button>
+                        <button class="nav-btn" onclick="openLesson(9)">الدرس التالي →</button>
+                    </div>
+                `
+            },
+            {
+                id: 9,
+                title: "المد الأساسي",
+                subtitle: "المد الطبيعي والمد البدلي",
+                description: "تعلم أنواع المد الأساسية وأحكام كل نوع",
+                duration: "22 دقيقة",
+                completed: false,
+                locked: true,
+                content: `
+                    <div class="content-section">
+                        <h3>🌊 المد الأساسي</h3>
+                        <p>المد: إطالة الصوت بحرف من حروف المد</p>
+                        <div class="rule-box">
+                            <div class="label">1️⃣ المد الطبيعي</div>
+                            <p>مد لا يتوقف على سبب (الألف والواو والياء الساكنة)</p>
+                            <p style="margin-top: 0.5rem;"><strong>المدة:</strong> حركتان</p>
+                            <div class="arabic-text">
+                                <span class="tajweed-madd">قَالَ</span> - <span class="tajweed-madd">نُور</span> - <span class="tajweed-madd">قِيل</span>
+                            </div>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">2️⃣ المد المتصل</div>
+                            <p>مد الألف أو الواو أو الياء قبل همزة في نفس الكلمة</p>
+                            <p style="margin-top: 0.5rem;"><strong>المدة:</strong> 4-5 حركات</p>
+                            <div class="arabic-text">
+                                <span class="tajweed-madd">مَاء</span> - <span class="tajweed-madd">سُؤَال</span> - <span class="tajweed-madd">شِيء</span>
+                            </div>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">3️⃣ المد المنفصل</div>
+                            <p>مد الألف أو الواو أو الياء قبل همزة في كلمة أخرى</p>
+                            <p style="margin-top: 0.5rem;"><strong>المدة:</strong> 4-5 حركات</p>
+                            <div class="arabic-text">
+                                إِنَّا آمَنَّا - قَالُوا إِنَّ
+                            </div>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">4️⃣ المد البدلي</div>
+                            <p>همزة قبل حرف مد في نفس الكلمة</p>
+                            <p style="margin-top: 0.5rem;"><strong>المدة:</strong> حركتان</p>
+                            <div class="arabic-text">
+                                <span class="tajweed-madd">آمَن</span> - <span class="tajweed-madd">أُوتِيَ</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="exercise-container">
+                        <div class="question-text">❓ ما نوع المد في كلمة 'جَاءَ'؟</div>
+                        <div class="options-grid">
+                            <button class="option-btn" onclick="checkAnswer(this, false, 9)">طبيعي</button>
+                            <button class="option-btn" onclick="checkAnswer(this, true, 9)">متصل</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 9)">منفصل</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 9)">بدلي</button>
+                        </div>
+                        <div class="feedback" id="feedback-9"></div>
+                    </div>
+                    <div class="completion-badge" id="completion-9">
+                        <h3>🎉 ممتاز! أكملت الدرس التاسع</h3>
+                        <p>يمكنك الآن الانتقال إلى الدرس التالي</p>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn" onclick="openLesson(8)">← الدرس السابق</button>
+                        <button class="nav-btn primary" onclick="completeLesson(9)">أكمل الدرس ✓</button>
+                        <button class="nav-btn" onclick="openLesson(10)">الدرس التالي →</button>
+                    </div>
+                `
+            },
+            {
+                id: 10,
+                title: "الغنة والتشديد",
+                subtitle: "أحكام الغنة والتشديد",
+                description: "تعلم أحكام الغنة والتشديد وكيفية نطقهما",
+                duration: "18 دقيقة",
+                completed: false,
+                locked: true,
+                content: `
+                    <div class="content-section">
+                        <h3>🔊 الغنة والتشديد</h3>
+                        <div class="rule-box">
+                            <div class="label">1️⃣ الغنة</div>
+                            <p><strong>التعريف:</strong> صوت رنين خفيف من الأنف</p>
+                            <p style="margin-top: 0.5rem;"><strong>الأحرف:</strong> النون ��الميم</p>
+                            <p style="margin-top: 0.5rem;"><strong>المدة:</strong> حركتان</p>
+                            <div class="arabic-text">
+                                <span class="tajweed-ghunna">ن</span>َ - <span class="tajweed-ghunna">م</span>َ
+                            </div>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">2️⃣ التشديد</div>
+                            <p><strong>التعريف:</strong> تضعيف الحرف (نطقه مشدداً)</p>
+                            <p style="margin-top: 0.5rem;"><strong>العلامة:</strong> شدة فوق الحرف (ّ)</p>
+                            <div class="arabic-text">
+                                الرَّحْمَن - الدِّين - الْمُحَمَّد
+                            </div>
+                            <p style="margin-top: 1rem;">⚠️ النون والميم المشددة تكون بغنة دائماً</p>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">🎯 حكم الغنة</div>
+                            <p><strong>النون المشددة:</strong> غنة بـ 6 حركات (حركتان من التشديد + 4 من الغنة)</p>
+                            <p style="margin-top: 0.5rem;"><strong>الميم المشددة:</strong> غنة بـ 6 حركات (حركتان من التشديد + 4 من الغنة)</p>
+                        </div>
+                    </div>
+                    <div class="exercise-container">
+                        <div class="question-text">❓ كم حركة للغنة الأساسية؟</div>
+                        <div class="options-grid">
+                            <button class="option-btn" onclick="checkAnswer(this, true, 10)">حركتان</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 10)">4 حركات</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 10)">6 حركات</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 10)">حركة واحدة</button>
+                        </div>
+                        <div class="feedback" id="feedback-10"></div>
+                    </div>
+                    <div class="completion-badge" id="completion-10">
+                        <h3>🎉 ممتاز! أكملت الدرس العاشر</h3>
+                        <p>يمكنك الآن الانتقال إلى الدرس التالي</p>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn" onclick="openLesson(9)">← الدرس السابق</button>
+                        <button class="nav-btn primary" onclick="completeLesson(10)">أكمل الدرس ✓</button>
+                        <button class="nav-btn" onclick="openLesson(11)">الدرس التالي →</button>
+                    </div>
+                `
+            },
+            {
+                id: 11,
+                title: "الإدغام المتقارب والمتجانس",
+                subtitle: "أنواع الإدغام المختلفة",
+                description: "تعلم أنواع الإدغام والفرق بين الإدغام المتقارب والمتجانس",
+                duration: "22 دقيقة",
+                completed: false,
+                locked: true,
+                content: `
+                    <div class="content-section">
+                        <h3>🔀 الإدغام المتقارب والمتجانس</h3>
+                        <div class="rule-box">
+                            <div class="label">1️⃣ الإدغام المتجانس</div>
+                            <p>إدخال حرف في حرف مثله تماماً</p>
+                            <div class="arabic-text">
+                                <span class="tajweed-idgham">نْ</span>نَسِيَ - <span class="tajweed-idgham">مْ</span>مَا
+                            </div>
+                            <p style="margin-top: 1rem;"><strong>الأمثلة:</strong> النون في النون، الميم في الميم</p>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">2️⃣ الإدغام المتقارب</div>
+                            <p>إدخال حرف في حرف قريب منه في المخرج</p>
+                            <div class="arabic-text">
+                                <span class="tajweed-idgham">مْ</span>يَقِيم - <span class="tajweed-idgham">قْ</span>كِفْل
+                            </div>
+                            <p style="margin-top: 1rem;"><strong>الأمثلة:</strong> الميم قبل الياء، القاف قبل الكاف</p>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">3️⃣ الإدغام بغنة</div>
+                            <p>النون الساكنة والتنوين قبل: ي، ر، م، ل، و، ن</p>
+                            <div class="arabic-text">
+                                <span class="tajweed-idgham">نْ</span>يَار - مِنْ يَوْم - قَاضِيّ رَشِيد
+                            </div>
+                        </div>
+                    </div>
+                    <div class="exercise-container">
+                        <div class="question-text">❓ ما نوع الإدغام في "نْ نَسِيَ"؟</div>
+                        <div class="options-grid">
+                            <button class="option-btn" onclick="checkAnswer(this, true, 11)">إدغام متماثل</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 11)">إدغام متقارب</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 11)">إدغام متجانس</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 11)">إدغام مخالف</button>
+                        </div>
+                        <div class="feedback" id="feedback-11"></div>
+                    </div>
+                    <div class="completion-badge" id="completion-11">
+                        <h3>🎉 ممتاز! أكملت الدرس الحادي عشر</h3>
+                        <p>يمكنك الآن الانتقال إلى الدرس التالي</p>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn" onclick="openLesson(10)">← الدرس السابق</button>
+                        <button class="nav-btn primary" onclick="completeLesson(11)">أكمل الدرس ✓</button>
+                        <button class="nav-btn" onclick="openLesson(12)">الدرس التالي →</button>
+                    </div>
+                `
+            },
+            {
+                id: 12,
+                title: "المد اللازم والعارض",
+                subtitle: "أنواع المد اللازم والمد العارض للسكون",
+                description: "تعلم المد اللازم الكلمي والحرفي والمد العارض للسكون مع أمثلة",
+                duration: "20 دقيقة",
+                completed: false,
+                locked: true,
+                content: `
+                    <div class="content-section">
+                        <h3>📏 المد اللازم</h3>
+                        <p>مد لا بد منه في حرف أو كلمة</p>
+                        <div class="rule-box">
+                            <div class="label">1️⃣ المد اللازم الكلمي</div>
+                            <p>مد في كلمة بسبب حرف مد ساكن</p>
+                            <div class="arabic-text">
+                                <span class="tajweed-madd">آ</span> - <span class="tajweed-madd">طَامَةٍ</span> - <span class="tajweed-madd">جَاءَ</span>
+                            </div>
+                            <p style="margin-top: 1rem;"><strong>المدة:</strong> 6 حركات</p>
+                        </div>
+                        <div class="rule-box">
+                            <div class="label">2️⃣ المد اللازم الحرفي</div>
+                            <p>مد في حروف المقطعات في أوائل السور</p>
+                            <div class="arabic-text">
+                                <span class="tajweed-madd">الم</span> - <span class="tajweed-madd">طسم</span> - <span class="tajweed-madd">يس</span>
+                            </div>
+                            <p style="margin-top: 1rem;"><strong>المدة:</strong> 6 حركات</p>
+                        </div>
+                    </div>
+                    <div class="content-section">
+                        <h3>🌊 المد العارض للسكون</h3>
+                        <p>مد يظهر عند الوقف على حرف ساكن آخر الكلمة</p>
+                        <div class="rule-box">
+                            <div class="label">📌 التعريف</div>
+                            <p>مد يظهر عند الوقف على حرف ساكن آخر الكلمة، ويختفي عند الاتصال</p>
+                            <div class="arabic-text">
+                                <span class="tajweed-madd">الْعَالَمِينَ</span> (عند الوقف) = الْعَالَمِيييينَ<br>
+                                الْعَالَمِينَ (عند الاتصال) = الْعَالَمِينَ
+                            </div>
+                            <p style="margin-top: 1rem;"><strong>المدة:</strong> 2-4-6 حركات (حسب الرواية)</p>
+                        </div>
+                    </div>
+                    <div class="content-section">
+                        <h3>📊 مقارنة المدود</h3>
+                        <table style="width: 100%; border-collapse: collapse; margin: 1.5rem 0; background: white; border-radius: 12px; overflow: hidden;">
+                            <thead>
+                                <tr style="background: var(--primary); color: white;">
+                                    <th style="padding: 1rem; text-align: right;">نوع المد</th>
+                                    <th style="padding: 1rem; text-align: right;">السبب</th>
+                                    <th style="padding: 1rem; text-align: right;">المدة</th>
+                                    <th style="padding: 1rem; text-align: right;">مثال</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                    <td style="padding: 1rem; font-weight: 600;">اللازم الكلمي</td>
+                                    <td style="padding: 1rem;">حرف مد ساكن في كلمة</td>
+                                    <td style="padding: 1rem;">6 حركات</td>
+                                    <td style="padding: 1rem; font-family: 'Amiri', serif;"><span class="tajweed-madd">آ</span></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid var(--border);">
+                                    <td style="padding: 1rem; font-weight: 600;">اللازم الحرفي</td>
+                                    <td style="padding: 1rem;">حروف المقطعات</td>
+                                    <td style="padding: 1rem;">6 حركات</td>
+                                    <td style="padding: 1rem; font-family: 'Amiri', serif;"><span class="tajweed-madd">الم</span></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 1rem; font-weight: 600;">العارض للسكون</td>
+                                    <td style="padding: 1rem;">الوقف على حرف ساكن</td>
+                                    <td style="padding: 1rem;">2-4-6 حركات</td>
+                                    <td style="padding: 1rem; font-family: 'Amiri', serif;"><span class="tajweed-madd">الْعَالَمِينَ</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="exercise-container">
+                        <div class="question-text">📝 ما نوع المد في "الم" (أول سورة البقرة)؟</div>
+                        <div class="options-grid">
+                            <button class="option-btn" onclick="checkAnswer(this, false, 12)">مد طبيعي</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 12)">مد متصل</button>
+                            <button class="option-btn" onclick="checkAnswer(this, true, 12)">مد لازم حرفي</button>
+                            <button class="option-btn" onclick="checkAnswer(this, false, 12)">مد عارض للسكون</button>
+                        </div>
+                        <div class="feedback" id="feedback-12"></div>
+                    </div>
+                    <div class="completion-badge" id="completion-12">
+                        <h3>🎉 تهانينا! أكملت جميع الدروس!</h3>
+                        <p>لقد أكملت رحلة تعلم التجويد بنجاح. يمكنك الآن اختبار معلوماتك في الاختبار الشامل.</p>
+                    </div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn" onclick="openLesson(11)">← الدرس السابق</button>
+                        <button class="nav-btn primary" onclick="completeLesson(12)">أكمل الدرس ✓</button>
+                        <button class="nav-btn" disabled>الدرس التالي →</button>
+                    </div>
+                `
+            }
+        ];
+
+        // Quiz Data
+        const quizQuestions = [
+            {
+                question: "ما هو التجويد اصطلاحاً؟",
+                options: ["علم النحو", "علم أحكام النطق بالحروف", "علم البلاغة", "علم التفسير"],
+                correct: 1
+            },
+            {
+                question: "كم مخرجاً للحروف العربية؟",
+                options: ["3", "5", "7", "10"],
+                correct: 1
+            },
+            {
+                question: "أي الحروف التالية من حروف القلقلة؟",
+                options: ["س ش ص", "ق ط ب ج د", "ف ح ث", "ك م ن"],
+                correct: 1
+            },
+            {
+                question: "ما حكم النون الساكنة قبل الباء؟",
+                options: ["الإظهار", "الإدغام", "الإقلاب", "الإخفاء"],
+                correct: 2
+            },
+            {
+                question: "كم حرفاً في الإدغام بغنة للنون الساكنة؟",
+                options: ["2", "4", "6", "8"],
+                correct: 1
+            },
+            {
+                question: "ما نوع المد في كلمة 'جَاءَ'؟",
+                options: ["طبيعي", "متصل", "منفصل", "بدل"],
+                correct: 1
+            },
+            {
+                question: "اللام في 'ال��مس' هي:",
+                options: ["قمرية", "شمسية", "ساكنة", "مشددة"],
+                correct: 1
+            },
+            {
+                question: "حرف الراء في 'رَبِّ' يُنطق:",
+                options: ["مفخماً", "مرققاً", "ساكناً", "مشدداً"],
+                correct: 0
+            },
+            {
+                question: "علامة الوقف التام في المصحف هي:",
+                options: ["قاف", "ميم", "دائرة", "لا"],
+                correct: 1
+            },
+            {
+                question: "السكت هو:",
+                options: ["قطع مع تنفس", "قطع بدون تنفس", "وقف تام", "مد"],
+                correct: 1
+            }
+        ];
+
+        let currentLesson = null;
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+
+        // Initialize
+        function init() {
+            renderLessons();
+            updateProgress();
+        }
+
+        // Render Lessons
+        function renderLessons() {
+            const container = document.getElementById('lessons-container');
+            container.innerHTML = lessons.map(lesson => `
+                <div class="lesson-card ${lesson.completed ? 'completed' : ''} ${lesson.locked ? 'locked' : ''}" 
+                     onclick="${lesson.locked ? '' : 'openLesson(' + lesson.id + ')'}">
+                    <div class="lesson-header">
+                        <div class="lesson-number">${lesson.id}</div>
+                        <div class="lesson-title">${lesson.title}</div>
+                        <div class="lesson-subtitle">${lesson.subtitle}</div>
+                    </div>
+                    <div class="lesson-body">
+                        <div class="lesson-description">${lesson.description}</div>
+                        <div class="lesson-meta">
+                            <span>⏱️ ${lesson.duration}</span>
+                            <span class="lesson-status ${lesson.completed ? 'status-completed' : lesson.locked ? 'status-locked' : 'status-available'}">
+                                ${lesson.completed ? '✓ مكتمل' : lesson.locked ? '🔒 مغلق' : '✓ متاح'}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Open Lesson
+        function openLesson(id) {
+            const lesson = lessons.find(l => l.id === id);
+            if (!lesson || lesson.locked) return;
+
+            currentLesson = lesson;
+            document.getElementById('modal-title').textContent = lesson.title;
+            document.getElementById('modal-subtitle').textContent = lesson.subtitle;
+            document.getElementById('modal-body').innerHTML = lesson.content;
+            document.getElementById('lesson-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        // Close Modal
+        function closeModal() {
+            document.getElementById('lesson-modal').classList.remove('active');
+            document.body.style.overflow = '';
+            currentLesson = null;
+        }
+
+        // Complete Lesson
+        function completeLesson(id) {
+            const lesson = lessons.find(l => l.id === id);
+            if (lesson) {
+                lesson.completed = true;
+
+                // Unlock next lesson
+                const nextLesson = lessons.find(l => l.id === id + 1);
+                if (nextLesson) {
+                    nextLesson.locked = false;
+                }
+
+                // Show completion badge
+                const badge = document.getElementById('completion-' + id);
+                if (badge) {
+                    badge.classList.add('show');
+                }
+
+                renderLessons();
+                updateProgress();
+            }
+        }
+
+        // Update Progress
+        function updateProgress() {
+            const completed = lessons.filter(l => l.completed).length;
+            const total = lessons.length;
+            const percentage = Math.round((completed / total) * 100);
+
+            document.getElementById('progress-bar').style.width = percentage + '%';
+            document.getElementById('progress-text').textContent = percentage + '%';
+        }
+
+        // Check Answer
+        function checkAnswer(btn, isCorrect, lessonId) {
+            const feedback = document.getElementById('feedback-' + lessonId);
+            const allBtns = btn.parentElement.querySelectorAll('.option-btn');
+
+            allBtns.forEach(b => b.disabled = true);
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                feedback.textContent = '✅ إجابة صحيحة! أحسنت!';
+                feedback.className = 'feedback show correct';
+            } else {
+                btn.classList.add('wrong');
+                feedback.textContent = '❌ إجابة خاطئة. حاول مرة أخرى في الدرس القادم!';
+                feedback.className = 'feedback show wrong';
+            }
+        }
+
+        // Switch Tab
+        function switchTab(btn, tabId) {
+            const container = btn.closest('.tabs-container');
+            container.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            container.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+
+            btn.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // Start Quiz
+        function startQuiz() {
+            currentQuizIndex = 0;
+            quizScore = 0;
+            showQuizQuestion();
+        }
+
+        // Show Quiz Question
+        function showQuizQuestion() {
+            if (currentQuizIndex >= quizQuestions.length) {
+                showQuizResults();
+                return;
+            }
+
+            const q = quizQuestions[currentQuizIndex];
+            const content = `
+                <div class="content-section">
+                    <h3>📝 سؤال ${currentQuizIndex + 1} من ${quizQuestions.length}</h3>
+                    <div class="question-text">${q.question}</div>
+                    <div class="options-grid">
+                        ${q.options.map((opt, i) => `
+                            <button class="option-btn" onclick="checkQuizAnswer(${i})">${opt}</button>
+                        `).join('')}
+                    </div>
+                    <div class="feedback" id="quiz-feedback"></div>
+                </div>
+            `;
+
+            document.getElementById('modal-title').textContent = 'اختبار التجويد';
+            document.getElementById('modal-subtitle').textContent = 'اختبر معلوماتك';
+            document.getElementById('modal-body').innerHTML = content;
+            document.getElementById('lesson-modal').classList.add('active');
+        }
+
+        // Check Quiz Answer
+        function checkQuizAnswer(selectedIndex) {
+            const q = quizQuestions[currentQuizIndex];
+            const feedback = document.getElementById('quiz-feedback');
+            const allBtns = document.querySelectorAll('.option-btn');
+
+            allBtns.forEach(b => b.disabled = true);
+
+            if (selectedIndex === q.correct) {
+                allBtns[selectedIndex].classList.add('correct');
+                feedback.textContent = '✅ إجابة صحيحة!';
+                feedback.className = 'feedback show correct';
+                quizScore++;
+            } else {
+                allBtns[selectedIndex].classList.add('wrong');
+                allBtns[q.correct].classList.add('correct');
+                feedback.textContent = '❌ إجابة خاطئة. الإجابة الصحيحة: ' + q.options[q.correct];
+                feedback.className = 'feedback show wrong';
+            }
+
+            setTimeout(() => {
+                currentQuizIndex++;
+                showQuizQuestion();
+            }, 2000);
+        }
+
+        // Show Quiz Results
+        function showQuizResults() {
+            const percentage = Math.round((quizScore / quizQuestions.length) * 100);
+            let message = '';
+            let emoji = '';
+
+            if (percentage >= 90) {
+                message = 'ممتاز! لديك معرفة قوية في التجويد!';
+                emoji = '🏆';
+            } else if (percentage >= 70) {
+                message = 'جيد! لكن يمكنك تحسين أدائك بمراجعة بعض الدروس.';
+                emoji = '👍';
+            } else {
+                message = 'يحتاج إلى مزيد من المراجعة. أنصحك بإعادة الدروس.';
+                emoji = '📚';
+            }
+
+            const content = `
+                <div class="content-section" style="text-align: center;">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">${emoji}</div>
+                    <h3>نتيجة الاختبار</h3>
+                    <div style="font-size: 3rem; font-weight: 800; color: var(--primary); margin: 1rem 0;">
+                        ${quizScore} / ${quizQuestions.length}
+                    </div>
+                    <div style="font-size: 1.5rem; color: var(--gold); margin-bottom: 1rem;">
+                        ${percentage}%
+                    </div>
+                    <p style="font-size: 1.1rem; color: var(--text-light);">${message}</p>
+                    <button class="quiz-btn" onclick="closeModal()" style="margin-top: 2rem;">إغلاق</button>
+                </div>
+            `;
+
+            document.getElementById('modal-title').textContent = 'نتيجة الاختبار';
+            document.getElementById('modal-subtitle').textContent = '';
+            document.getElementById('modal-body').innerHTML = content;
+        }
+
+        // Close modal on overlay click
+        document.getElementById('lesson-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Initialize on load
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
